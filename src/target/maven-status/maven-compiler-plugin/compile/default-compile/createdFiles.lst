@@ -1,0 +1,5 @@
+praktikum\model\User.class
+praktikum\order\OrderClient.class
+praktikum\model\Order.class
+praktikum\user\UserClient.class
+praktikum\model\BaseURL.class

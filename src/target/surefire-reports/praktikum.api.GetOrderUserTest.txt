@@ -1,0 +1,28 @@
+-------------------------------------------------------------------------------
+Test set: praktikum.api.GetOrderUserTest
+-------------------------------------------------------------------------------
+Tests run: 4, Failures: 2, Errors: 2, Skipped: 0, Time elapsed: 0.255 s <<< FAILURE! - in praktikum.api.GetOrderUserTest
+getOrderNotAuthUser(praktikum.api.GetOrderUserTest)  Time elapsed: 0.151 s  <<< ERROR!
+java.lang.ClassCastException: class java.util.ImmutableCollections$ListN cannot be cast to class java.util.ArrayList (java.util.ImmutableCollections$ListN and java.util.ArrayList are in module java.base of loader 'bootstrap')
+	at praktikum.api.GetOrderUserTest.setUp(GetOrderUserTest.java:42)
+
+getOrderNotAuthUser(praktikum.api.GetOrderUserTest)  Time elapsed: 0.153 s  <<< FAILURE!
+java.lang.AssertionError: 
+1 expectation failed.
+Expected status code <200> but was <401>.
+
+	at praktikum.api.GetOrderUserTest.loginUserAndGetToken(GetOrderUserTest.java:101)
+	at praktikum.api.GetOrderUserTest.clearData(GetOrderUserTest.java:85)
+
+getOrderAuthUser(praktikum.api.GetOrderUserTest)  Time elapsed: 0.092 s  <<< ERROR!
+java.lang.ClassCastException: class java.util.ImmutableCollections$ListN cannot be cast to class java.util.ArrayList (java.util.ImmutableCollections$ListN and java.util.ArrayList are in module java.base of loader 'bootstrap')
+	at praktikum.api.GetOrderUserTest.setUp(GetOrderUserTest.java:42)
+
+getOrderAuthUser(praktikum.api.GetOrderUserTest)  Time elapsed: 0.092 s  <<< FAILURE!
+java.lang.AssertionError: 
+1 expectation failed.
+Expected status code <200> but was <401>.
+
+	at praktikum.api.GetOrderUserTest.loginUserAndGetToken(GetOrderUserTest.java:101)
+	at praktikum.api.GetOrderUserTest.clearData(GetOrderUserTest.java:85)
+
