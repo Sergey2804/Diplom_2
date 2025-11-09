@@ -1,0 +1,11 @@
+-------------------------------------------------------------------------------
+Test set: praktikum.api.LoginUserTest
+-------------------------------------------------------------------------------
+Tests run: 3, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 1.085 s <<< FAILURE! - in praktikum.api.LoginUserTest
+loginWithUserTrueAndBody(praktikum.api.LoginUserTest)  Time elapsed: 0.122 s  <<< FAILURE!
+java.lang.AssertionError: 
+1 expectation failed.
+Expected status code <200> but was <403>.
+
+	at praktikum.api.LoginUserTest.loginWithUserTrueAndBody(LoginUserTest.java:39)
+
