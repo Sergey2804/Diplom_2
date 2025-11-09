@@ -33,7 +33,6 @@ public class CreateUserTest {
     @Test
     @DisplayName("Создать уникального пользователя.")
     @Description("Post запрос на ручку /api/v1/courier")
-    @Step("Создание пользователя")
     public void createUniqueUserAndBodyTest() {
         responseLogin
                 .statusCode(200)
@@ -47,7 +46,6 @@ public class CreateUserTest {
     @Test
     @DisplayName("Создать пользователя, который уже зарегистрирован.")
     @Description("Post запрос на ручку /api/v1/courier")
-    @Step("Создание пользователя")
     public void createRegisteredUserAndBodyTest() {
         ValidatableResponse response = userClient.createUser(userStellar);
         response
@@ -59,7 +57,6 @@ public class CreateUserTest {
     @Test
     @DisplayName("Создать пользователя и не заполнить пароль.")
     @Description("Post запрос на ручку /api/v1/courier")
-    @Step("Создание пользователя")
     public void createUserWithoutPasswordTest() {
         ValidatableResponse response = userClient.createUser(new User(TEST_LOGIN_ONE, null, TEST_NAME_ONE));
         response
@@ -71,7 +68,6 @@ public class CreateUserTest {
     @Test
     @DisplayName("Создать пользователя без заполнения поля почты.")
     @Description("Post запрос на ручку /api/v1/courier")
-    @Step("Создание пользователя")
     public void createUserWithoutEmailTest() {
         ValidatableResponse response = userClient.createUser(new User(null, TEST_PASSWORD_ONE, TEST_NAME_ONE));
         response
@@ -83,7 +79,6 @@ public class CreateUserTest {
     @Test
     @DisplayName("Создать пользователя без заполнения поля имя пользователя.")
     @Description("Post запрос на ручку /api/v1/courier")
-    @Step("Создание пользователя")
     public void createUserWithoutNameTest() {
         ValidatableResponse response = userClient.createUser(new User(TEST_LOGIN_ONE, TEST_PASSWORD_ONE, null));
         response
@@ -93,7 +88,6 @@ public class CreateUserTest {
     }
 
     @After
-    @Step("Удаление пользователя")
     public void clearData() {
         try {
             String accessTokenWithBearer = responseLogin.extract().path("accessToken");

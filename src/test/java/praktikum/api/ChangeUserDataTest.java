@@ -19,7 +19,6 @@ public class ChangeUserDataTest {
     private ValidatableResponse response;
 
     @Before
-    @Step("Создание пользователя")
     public void setUp() {
         userClient = new UserClient();
         user = new User(TEST_LOGIN_ONE, TEST_PASSWORD_ONE, TEST_NAME_ONE);
@@ -29,7 +28,6 @@ public class ChangeUserDataTest {
     @Test
     @DisplayName("Изменение информации о пользователе с авторизацией. Ответ 200")
     @Description("Patch запрос на ручку /api/auth/user")
-    @Step("Изменение информации")
     public void updateUserWithAuth() {
         User user = new User(TEST_LOGIN_ONE, TEST_PASSWORD_ONE, TEST_NAME_ONE);
         ValidatableResponse responseLogin = userClient.loginUser(user);
@@ -44,7 +42,6 @@ public class ChangeUserDataTest {
     @Test
     @DisplayName("Изменение информации о пользователе без авторизации. Ответ 401")
     @Description("Patch запрос на ручку /api/auth/user")
-    @Step("Изменение информации")
     public void updateUserWithoutAuth() {
         User user = new User(TEST_LOGIN_ONE, TEST_PASSWORD_ONE, TEST_NAME_ONE);
         ValidatableResponse responseLogin = userClient.loginUser(user);
@@ -63,7 +60,6 @@ public class ChangeUserDataTest {
     }
 
     @After
-    @Step("Удаление пользователя")
     public void clearData() {
         try {
             User userTwo = new User(TEST_LOGIN_TWO, TEST_PASSWORD_TWO, TEST_NAME_TWO);

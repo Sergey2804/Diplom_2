@@ -1,7 +1,6 @@
 package praktikum.api;
 
 import io.qameta.allure.Description;
-import io.qameta.allure.Step;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
 import praktikum.model.Order;
@@ -23,17 +22,26 @@ import static praktikum.testValue.TestValue.*;
 public class CreateOrderTest {
     private UserClient userClient;
     private OrderClient orderClient;
+    private String accessToken;
 
     @Before
     public void setUp() {
         userClient = new UserClient();
         orderClient = new OrderClient();
+
+        // Создаем пользователя для тестов, где нужна авторизация
+        User userStellar = new User(TEST_LOGIN_ONE, TEST_PASSWORD_ONE, TEST_NAME_ONE);
+        ValidatableResponse responseCreate = userClient.createUser(userStellar);
+
+        if (responseCreate.extract().statusCode() == HTTP_OK) {
+            String accessTokenWithBearer = responseCreate.extract().path("accessToken");
+            accessToken = accessTokenWithBearer.replace("Bearer ", "");
+        }
     }
 
     @Test
     @DisplayName("Создание заказа без авторизации")
     @Description("Post запрос на ручку /api/orders")
-    @Step("Создание заказа")
     public void createOrderWithoutAuth() {
         ArrayList<String> ingredients = new ArrayList<>();
         ingredients.add(TEST_BUN);
@@ -50,7 +58,6 @@ public class CreateOrderTest {
     @Test
     @DisplayName("Создание заказа без авторизации, c неверным хешем")
     @Description("Post запрос на ручку /api/orders")
-    @Step("Создание заказа")
     public void createOrderWithoutAuthErrorHash() {
         ArrayList<String> ingredients = new ArrayList<>();
         ingredients.add(TEST_BAD_BUN);
@@ -65,7 +72,6 @@ public class CreateOrderTest {
     @Test
     @DisplayName("Создание заказа без авторизации, без ингредиентов")
     @Description("Post запрос на ручку /api/orders")
-    @Step("Создание заказа")
     public void createOrderWithoutAuthNoIngredient() {
         Order orderStellar = new Order(null);
         orderClient
@@ -81,12 +87,7 @@ public class CreateOrderTest {
     @Test
     @DisplayName("Создание заказа с авторизацией")
     @Description("Post запрос на ручку /api/orders")
-    @Step("Создание заказа")
     public void createOrderWithAuth() {
-        User userStellar = new User(TEST_LOGIN_ONE, TEST_PASSWORD_ONE, TEST_NAME_ONE);
-        ValidatableResponse responseCreate = userClient.createUser(userStellar).assertThat().statusCode(HTTP_OK);
-        String accessTokenWithBearer = responseCreate.extract().path("accessToken");
-        String accessToken = accessTokenWithBearer.replace("Bearer ", "");
         ArrayList<String> ingredients = new ArrayList<>();
         ingredients.add(TEST_BUN);
         ingredients.add(TEST_FILLING_ONE);
@@ -105,12 +106,7 @@ public class CreateOrderTest {
     @Test
     @DisplayName("Создание заказа с авторизацией, без ингредиентов")
     @Description("Post запрос на ручку /api/orders")
-    @Step("Создание заказа")
     public void createOrderWithAuthNoIngredient() {
-        User userStellar = new User(TEST_LOGIN_ONE, TEST_PASSWORD_ONE, TEST_NAME_ONE);
-        ValidatableResponse responseCreate = userClient.createUser(userStellar).assertThat().statusCode(HTTP_OK);
-        String accessTokenWithBearer = responseCreate.extract().path("accessToken");
-        String accessToken = accessTokenWithBearer.replace("Bearer ", "");
         Order orderStellar = new Order(null);
         orderClient
                 .orderWithAuth(accessToken, orderStellar)
@@ -124,28 +120,22 @@ public class CreateOrderTest {
     @Test
     @DisplayName("Создание заказа с авторизацией с неверным хешем")
     @Description("Post запрос на ручку /api/orders")
-    @Step("Создание заказа")
     public void createOrderWithAuthErrorHash() {
-        User userStellar = new User(TEST_LOGIN_ONE, TEST_PASSWORD_ONE, TEST_NAME_ONE);
-        ValidatableResponse responseCreate = userClient.createUser(userStellar).assertThat().statusCode(HTTP_OK);
-        String accessTokenWithBearer = responseCreate.extract().path("accessToken");
-        String accessToken = accessTokenWithBearer.replace("Bearer ", "");
         ArrayList<String> ingredients = new ArrayList<>(List.of(TEST_BAD_BUN, TEST_FILLING_TWO));
         Order orderStellar = new Order(ingredients);
         orderClient
                 .orderWithAuth(accessToken, orderStellar)
                 .assertThat()
-                .statusCode(500);
+                .statusCode(HTTP_INTERNAL_ERROR);
     }
 
     @After
     public void clearData() {
         try {
-            User userStellar = new User(TEST_LOGIN_ONE, TEST_PASSWORD_ONE, TEST_NAME_ONE);
-            ValidatableResponse responseLogin = userClient.loginUser(userStellar);
-            String accessTokenWithBearer = responseLogin.extract().path("accessToken");
-            String accessToken = accessTokenWithBearer.replace("Bearer ", "");
-            userClient.deleteUser(accessToken);
+            if (accessToken != null) {
+                userClient.deleteUser(accessToken);
+                System.out.println("Пользователь удален");
+            }
         } catch (Exception e) {
             System.out.println("Завершилось без удаления");
         }

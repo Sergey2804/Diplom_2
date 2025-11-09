@@ -50,7 +50,6 @@ public class GetOrderUserTest {
     @Test
     @DisplayName("Получение заказов авторизованного пользователя")
     @Description("Get запрос на ручку api/orders")
-    @Step("Получение заказов")
     public void getOrderAuthUser() {
         String accessTokenWithBearer = createUserAndGetToken(testUser);
         accessToken = extractAccessToken(accessTokenWithBearer);
@@ -66,7 +65,6 @@ public class GetOrderUserTest {
     @Test
     @DisplayName("Получение заказов не авторизованного пользователя.")
     @Description("Get запрос на ручку api/orders")
-    @Step("Получение заказов")
     public void getOrderNotAuthUser() {
         String accessTokenWithBearer = createUserAndGetToken(testUser);
         accessToken = extractAccessToken(accessTokenWithBearer);

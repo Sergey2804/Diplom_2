@@ -24,7 +24,6 @@ public class LoginUserTest {
 
 
     @Before
-    @Step("Создание пользователя")
     public void setUp() {
         userClient = new UserClient();
         userStellar = new User(TEST_LOGIN_ONE, TEST_PASSWORD_ONE, TEST_NAME_ONE);
@@ -34,7 +33,6 @@ public class LoginUserTest {
     @Test
     @DisplayName("Логин существующего пользователя.")
     @Description("Post запрос на ручку /api/auth/login")
-    @Step("Логин пользователя")
     public void loginWithUserTrueAndBody() {
         responseLogin.assertThat().statusCode(HTTP_OK);
         responseLogin.assertThat().body("success", equalTo(true));
@@ -49,7 +47,6 @@ public class LoginUserTest {
     @Test
     @DisplayName("Логин с неверным адресом почты.")
     @Description("Post запрос на ручку /api/auth/login")
-    @Step("Логин пользователя")
     public void loginWithUserFalseAndBody() {
         userStellar.setEmail(TEST_LOGIN_TWO);
         userClient.loginUser(userStellar).assertThat().statusCode(HTTP_UNAUTHORIZED);
@@ -62,19 +59,17 @@ public class LoginUserTest {
     @Test
     @DisplayName("Логин под неверным паролем.")
     @Description("Post запрос на ручку /api/auth/login")
-    @Step("Логин пользователя")
     public void loginWithUserFalsePasswordAndBody() {
         userStellar.setPassword(TEST_PASSWORD_TWO);
-        userClient.loginUser(userStellar)
-                .assertThat().statusCode(HTTP_UNAUTHORIZED);
-        userClient.loginUser(userStellar)
-                .assertThat().body("success", equalTo(false))
+        ValidatableResponse loginResponse = userClient.loginUser(userStellar);
+
+        loginResponse.assertThat().statusCode(HTTP_UNAUTHORIZED);
+        loginResponse.assertThat().body("success", equalTo(false))
                 .and()
                 .body("message", equalTo("email or password are incorrect"));
     }
 
     @After
-    @Step("Удаление пользователя")
     public void clearData() {
         try {
             String accessTokenWithBearer = responseLogin.extract().path("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5MDcyMTFiOTg0MjcwMDAxYmRlYzc3YiIsImlhdCI6MTc2MjA3NDkxNCwiZXhwIjoxNzYyMDc2MTE0fQ.dio6EEwQ-DiPCKqwddvOBn4WERCg5QtkFz3zqyGGH3Y");
